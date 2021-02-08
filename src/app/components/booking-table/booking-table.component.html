@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<div class="row justify-content-center" style="max-width: 100%" *ngIf="userType == '[ROLE_USER]'">
+    <div class="col-6">
+        <h1>Bookings</h1>
+        <br>
+        <table class="table">
+            <thead>
+            <th>One way</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Depart date</th>
+            <th>Return date</th>
+            <th>Company</th>
+            <th>Tickets reserved</th>
+            <th>Available</th>
+            </thead>
+            <tr *ngFor="let booking of bookings">
+                <td>{{booking.ticket.oneWay}}</td>
+                <td>{{booking.flight.origin.name}}</td>
+                <td>{{booking.flight.destination.name}}</td>
+                <td>{{booking.ticket.departDate| date: 'dd/MM/yyyy, HH:mm'}}</td>
+                <td>{{booking.ticket.returnDate| date: 'dd/MM/yyyy, HH:mm'}}</td>
+                <td>{{booking.ticket.airline.name}}</td>
+                <td>{{booking.numberOfTickets}}</td>
+                <td>{{booking.available}}</td>
+                <td><input type="button" value="Delete reservation" (click)="deleteBooking(booking)"></td>
+                <td><input type="button" value="Buy reservation" (click)="buyBooking(booking.id)"></td>
+            </tr>
+        </table>
+    </div>
+</div>

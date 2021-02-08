@@ -1,0 +1,34 @@
+<app-header></app-header>
+<br>
+<div *ngIf="currentUserType == '[ROLE_ADMIN]'" class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <th>Add User</th>
+        <br>
+        <form [formGroup]="addUserForm" (ngSubmit)="submitAddUserForm(addUserForm.value)">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Enter username" formControlName="username">
+                <div class="error-message" *ngIf="username.errors?.required"> username is required!</div>
+            </div>
+            <div class="form-group">
+                <select class="browser-default custom-select form-control" formControlName="userType">
+                    <option selected="" value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+                <div class="error-message" *ngIf="userType.errors?.required"> User type is required!</div>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Enter password" formControlName="password">
+                <div class="error-message" *ngIf="password.errors?.required"> Password is required!</div>
+                <div class="error-message" *ngIf="password.errors?.minlength"> Password has to be at least 6 characters
+                    long!
+                </div>
+                <div class="error-message" *ngIf="password.errors?.pattern"> Password has to have a number and a
+                    letter!
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!addUserForm.valid">Add user</button>
+        </form>
+    </div>
+</div>
+<hr>
+<app-ticket-table></app-ticket-table>

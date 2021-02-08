@@ -1,0 +1,59 @@
+<app-header></app-header>
+
+<div *ngIf="userType == '[ROLE_ADMIN]'" class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <h1>Edit Ticket</h1>
+        <br>
+        <form [formGroup]="editTicketForm" (ngSubmit)="submitEditTicketForm(editTicketForm.value)">
+            <div class="form-group">
+                <label for="chbx-oneWay" class="col-form-label">One way:</label>
+                <input type="checkbox" class="form-control" placeholder="One way" formControlName="oneWay"
+                       id="chbx-oneWay" (click)="selected()">
+            </div>
+            <div class="form-group">
+                <label for="flight-select" class="col-form-label">Select flight:</label>
+                <select class="browser-default custom-select form-control" formControlName="flight" id="flight-select">
+                    <option *ngFor="let flight of flights"
+                            [value]="flight.id">
+                        {{flight.origin.name}} to {{flight.destination.name}}
+                    </option>
+                </select>
+                <div class="error-message" *ngIf="flight.errors?.required"> Flight is required!</div>
+            </div>
+            <div class="form-group">
+                <label for="example-datetime-local-input1" class="col-form-label">Depart date:</label>
+                <input class="form-control" type="datetime-local" id="example-datetime-local-input1"
+                       formControlName="departDate">
+                <div class="error-message" *ngIf="departDate.errors?.required"> Depart date is required</div>
+            </div>
+            <div class="form-group">
+                <label for="example-datetime-local-input2" class="col-form-label">Return date:</label>
+                <input class="form-control" type="datetime-local" id="example-datetime-local-input2"
+                       formControlName="returnDate">
+            </div>
+            <div class="form-group">
+                <label for="airline-select" class="col-form-label">Select airline:</label>
+                <select class="browser-default custom-select form-control" formControlName="airline"
+                        id="airline-select">
+                    <option *ngFor="let airline of airlines"
+                            [value]="airline.id">
+                        {{airline.name}}
+                    </option>
+                </select>
+                <div class="error-message" *ngIf="airline.errors?.required"> Airline is required!</div>
+            </div>
+            <div class="form-group">
+                <label for="input-numberOfTickets" class="col-form-label">Number of tickets:</label>
+                <input type="number" class="form-control" placeholder="Number of tickets"
+                       formControlName="numberOfAvailableTickets" id="input-numberOfTickets">
+                <div class="error-message" *ngIf="numberOfAvailableTickets.errors?.required"> Number of tickets is
+                    required!
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <button type="submit" class="btn btn-primary" [disabled]="!editTicketForm.valid">Update ticket</button>
+                <button type="button" class="btn btn-primary" style="margin-left: 2em" [routerLink]="['/home']">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

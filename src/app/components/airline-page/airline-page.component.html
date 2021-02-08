@@ -1,0 +1,106 @@
+<app-header></app-header>
+<br>
+<div *ngIf="userType == '[ROLE_ADMIN]'" class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <th>Add Airline</th>
+        <form [formGroup]="addAirlineForm" (ngSubmit)="submitAddAirline(addAirlineForm.value)">
+            <div class="form-group">
+                <label for="input-name-add" class="col-form-label">Airline name:</label>
+                <input type="text" class="form-control" placeholder="Name" formControlName="nameAdd"
+                       id="input-name-add">
+                <div class="error-message" *ngIf="nameAdd.errors?.required"> Name is required!</div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!addAirlineForm.valid">Add airline</button>
+        </form>
+    </div>
+</div>
+<hr>
+<br>
+<div *ngIf="userType == '[ROLE_ADMIN]'" class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <th>Edit Airline</th>
+        <form [formGroup]="editAirlineForm" (ngSubmit)="submitEditAirline(editAirlineForm.value)">
+            <div class="form-group">
+                <label for="input-name" class="col-form-label">Airline name:</label>
+                <input type="text" class="form-control" placeholder="Name" formControlName="nameEdit"
+                       id="input-name">
+                <div class="error-message" *ngIf="nameEdit.errors?.required"> Name is required!</div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!editAirlineForm.valid">Edit airline</button>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="userType == '[ROLE_USER]'" class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <th>Search Tickets</th>
+        <form [formGroup]="searchTicketForm" (ngSubmit)="submitSearchTicket(searchTicketForm.value)">
+            <div class="form-group">
+                <label for="origin-search" class="col-form-label">Origin:</label>
+                <input type="text" class="form-control" placeholder="Origin" formControlName="originSearch"
+                       id="origin-search">
+            </div>
+            <div class="form-group">
+                <label for="destination-search" class="col-form-label">Destination:</label>
+                <input type="text" class="form-control" placeholder="Destination" formControlName="destinationSearch"
+                       id="destination-search">
+            </div>
+            <div class="form-group">
+                <label for="example-datetime-local-input1-search" class="col-form-label">Depart date:</label>
+                <input class="form-control" type="datetime-local" id="example-datetime-local-input1-search"
+                       formControlName="departDateSearch">
+            </div>
+            <div class="form-group">
+                <label for="example-datetime-local-input2-search" class="col-form-label">Return date:</label>
+                <input class="form-control" type="datetime-local" id="example-datetime-local-input2-search"
+                       formControlName="returnDateSearch">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<hr>
+<br>
+<div class="row justify-content-center" style="max-width: 100%">
+    <div class="col-6">
+        <h2>{{airline.name}}</h2>
+        <input *ngIf="userType == '[ROLE_ADMIN]'" type="button" value="Delete airline" (click)="deleteAirline(airline.id.toString())">
+        <br>
+        <br>
+        <label for="filter-select" class="col-form-label">Select filter: </label>
+        <select name="Filter" id="filter-select" (change)="filterTicketByWay($event)">
+            <option value=0 selected>All tickets</option>
+            <option value=1>Return tickets</option>
+            <option value=2>One way tickets</option>
+        </select>
+        <table class="table">
+            <thead>
+            <th>One way</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Depart date</th>
+            <th>Return date</th>
+            <th>Company</th>
+            <th>Ticket Count</th>
+            </thead>
+            <tr *ngFor="let ticket of tickets">
+                <td>{{ticket.oneWay}}</td>
+                <td>{{ticket.flight.origin.name}}</td>
+                <td>{{ticket.flight.destination.name}}</td>
+                <td>{{ticket.departDate| date: 'dd/MM/yyyy, HH:mm'}}</td>
+                <td>{{ticket.returnDate| date: 'dd/MM/yyyy, HH:mm'}}</td>
+                <td [routerLink]="['/airline/',ticket.airline.id]">{{ticket.airline.name}}</td>
+                <td>{{ticket.numberOfAvailableTickets}}</td>
+                <td *ngIf="userType == '[ROLE_ADMIN]'"><input type="button" value="Ticket delete"
+                                                              (click)="deleteTicket(ticket.id)"></td>
+                <td *ngIf="userType == '[ROLE_ADMIN]'"><input type="button" value="Ticket edit"
+                                                              [routerLink]="['/ticket/', ticket.id]"></td>
+                <td *ngIf="userType == '[ROLE_USER]'"><input type="button" value="Reserve ticket"
+                                                             (click)="reserve(ticket)"></td>
+                <td *ngIf="userType == '[ROLE_USER]'"><input type="number" placeholder="Number of tickets"
+                                                             id="input-reserve-number{{ticket.id}}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
